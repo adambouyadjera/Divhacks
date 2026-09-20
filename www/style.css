@@ -462,22 +462,3 @@ footer > span {
     justify-self: center;
   }
 }
-
-.nyc311-link {
-  display: flex;
-  align-items: center;
-  padding: 0;
-  border: none;
-  background: none;
-  transition: transform 0.2s;
-}
-
-.nyc311-logo {
-  display: block;
-  width: 80px;
-  height: auto;
-}
-
-.nyc311-link:hover {
-  transform: scale(1.05);
-}
