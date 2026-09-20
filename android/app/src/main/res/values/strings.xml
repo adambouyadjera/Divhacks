@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Divhacks</string>
+    <string name="title_activity_main">Divhacks</string>
+    <string name="package_name">com.divhacks.app</string>
+    <string name="custom_url_scheme">com.divhacks.app</string>
+</resources>

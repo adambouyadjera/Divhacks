@@ -1,0 +1,21 @@
+{
+  "name": "divhacks",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "mobile:copy": "mkdir -p www && cp -R index.html style.css script.js images www/",
+    "mobile:sync": "npm run mobile:copy && npx cap sync",
+    "android": "npm run mobile:sync && npx cap open android",
+    "ios": "npm run mobile:sync && npx cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/cli": "^8.5.2",
+    "@capacitor/core": "^8.5.2",
+    "@capacitor/ios": "^8.5.2"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  }
+}
