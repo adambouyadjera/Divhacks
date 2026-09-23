@@ -458,7 +458,41 @@ footer > span {
     justify-self: center;
     height: 440px;
   }
-  .map-link {
-    justify-self: center;
-  }
+.map-link {
+  justify-self: center;
 }
+}
+
+/* Columbia event map */
+.header-note { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #65665e; }
+h1 { font-family: "Manrope", sans-serif; font-size: clamp(34px, 5vw, 58px); line-height: 1; letter-spacing: -2.8px; margin: 14px 0 0; }
+h1 em { font-family: Georgia, serif; font-weight: 400; }
+.map-section { padding-top: 54px; }
+.map-instruction { max-width: 190px; margin: 0; font-size: 13px; line-height: 1.5; color: #65665e; text-align: right; }
+.map-experience { display: grid; grid-template-columns: minmax(0, 1fr); transition: grid-template-columns .3s ease; gap: 24px; align-items: start; }
+.map-experience.is-drafting { grid-template-columns: minmax(0, 1.35fr) minmax(300px, .65fr); }
+.map-panel { height: 560px; max-width: none; border: 1px solid var(--ink); border-radius: 16px; overflow: hidden; background: #dce8d1; }
+.location-map { height: 100%; width: 100%; }
+.map-caption { margin: 12px 0 0; color: #65665e; font-size: 11px; }
+.event-form-panel { border: 1px solid var(--ink); border-radius: 16px; background: var(--lilac); padding: 24px; box-shadow: 5px 7px 0 var(--ink); }
+.event-form-panel[aria-hidden="true"] { display: none; }
+.form-heading { display: flex; gap: 16px; justify-content: space-between; align-items: start; }
+.form-heading h2 { font-size: 24px; line-height: 1.05; margin-top: 10px; }
+.icon-button { width: 34px; height: 34px; padding: 0; border: 1px solid var(--ink); background: transparent; border-radius: 50%; font-size: 24px; line-height: 1; }
+.selected-location, .form-note { font-size: 11px; line-height: 1.5; }
+.selected-location { background: #ffffff88; border-radius: 8px; padding: 10px; margin: 22px 0 18px; }
+#event-form { display: grid; gap: 15px; }
+#event-form label { display: grid; gap: 7px; font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+#event-form input, #event-form select { width: 100%; min-height: 42px; border: 1px solid var(--ink); border-radius: 7px; padding: 9px 11px; background: var(--paper); color: var(--ink); font: inherit; letter-spacing: 0; text-transform: none; }
+.primary-button, .event-card button { border: 1px solid var(--ink); border-radius: 8px; background: var(--ink); color: white; padding: 13px 16px; font-weight: 700; transition: transform .15s ease; }
+.primary-button:hover, .event-card button:hover { transform: translateY(-2px); }
+.form-note { margin: 18px 0 0; color: #3f443a; }
+.event-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.event-card { background: var(--lime); border: 1px solid var(--ink); border-radius: 12px; padding: 22px; box-shadow: 4px 5px 0 var(--ink); }
+.event-card:nth-child(2) { background: var(--peach); }.event-card:nth-child(3n) { background: var(--lilac); }
+.event-card h3 { margin: 8px 0; font-size: 22px; letter-spacing: -1px; }.event-card p { font-size: 12px; line-height: 1.5; margin: 0 0 18px; }.event-card .event-category { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }.event-card button { width: 100%; }
+.maplibregl-ctrl-attrib { font-size: 9px !important; }
+.maplibregl-popup-content { font-family: "DM Sans", sans-serif; padding: 12px 14px; line-height: 1.5; }
+.event-marker { width: 26px; height: 26px; padding: 0; border: 3px solid var(--ink); border-radius: 50% 50% 50% 0; background: var(--lime); box-shadow: 2px 3px 0 var(--ink); transform: rotate(-45deg); }
+.draft-marker { width: 22px; height: 22px; border: 3px solid var(--ink); border-radius: 50%; background: var(--peach); box-shadow: 2px 3px 0 var(--ink); }
+@media (max-width: 850px) { .map-experience.is-drafting { grid-template-columns: 1fr; }.map-panel { height: 470px; }.event-list { grid-template-columns: 1fr; }.map-instruction { text-align: left; }.section-heading { align-items: start; flex-direction: column; }.header-note { display: none; } }

@@ -4,102 +4,137 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#f6f3eb" />
-    <title>Oddly — a little less ordinary.</title>
+    <title>Campus Connect</title>
+    <link rel="stylesheet" href="vendor/maplibre/maplibre-gl.css" />
     <link rel="stylesheet" href="style.css" />
-    <script src="script.js" defer></script>
+    <script type="module" src="script.js"></script>
   </head>
   <body>
     <header class="site-header">
-      <a class="app-brand" href="#" aria-label="App Name Goes Here home">
+      <a class="app-brand" href="#" aria-label="Campus Connect home">
         <span class="app-logo-placeholder" aria-hidden="true">◇</span>
-        <span>App Name Goes Here</span>
+        <span>Campus Connect</span>
       </a>
+      <span class="header-note">Columbia University</span>
     </header>
-
     <main>
-      <section class="hero" aria-label="Explore locations on Google Maps">
-        <div class="map-panel">
-          <iframe
-            class="location-map"
-            title="Interactive Google Map centered on New York City"
-            src="https://www.google.com/maps?q=New+York+City&amp;z=12&amp;output=embed"
-            width="540"
-            height="480"
-            allowfullscreen
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </div>
-        <a class="map-link" href="https://www.google.com/maps/search/?api=1&amp;query=New+York+City" target="_blank" rel="noopener noreferrer">Open in Google Maps ↗</a>
-      </section>
-
-      <section class="playground section-wrap" id="playground">
+      <section class="map-section section-wrap" aria-labelledby="map-heading">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">Our Content Goes Below here</p>
-            <h2>header goes here</h2>
+            <p class="eyebrow">CAMPUS HAPPENINGS</p>
+            <h1 id="map-heading">Find your people <em>at Columbia.</em></h1>
           </div>
-          <span class="section-index">(01 — 03)</span>
+          <p class="map-instruction">Tap a point on campus to host an event.</p>
         </div>
-        <div class="cards">
-          <button
-            class="card card-lime"
-            type="button"
-            data-message="Every big idea starts with a little ‘what if?’ Keep going."
-          >
-            <div class="card-top">
-              <span>01 / THE IDEAS</span><span class="round-arrow">↗</span>
+        <div class="map-experience" id="map-experience">
+          <div class="map-column">
+            <div class="map-panel">
+              <div
+                id="campus-map"
+                class="location-map"
+                role="application"
+                aria-label="Interactive map of Columbia University campus"
+              ></div>
             </div>
-            <div class="card-art squiggle" aria-hidden="true">✳</div>
-            <h3>Lorem ipsum dolor.</h3>
-            <p>Small sparks. Unexpected connections. A whole lot of what if.</p>
-            <span class="card-link">Find your spark ↗</span>
-          </button>
-          <button
-            class="card card-lilac"
-            type="button"
-            data-message="Try something imperfect today. Happy accidents are welcome here."
-          >
-            <div class="card-top">
-              <span>02 / THE EXPERIMENTS</span
-              ><span class="round-arrow">↗</span>
-            </div>
-            <div class="card-art loops" aria-hidden="true">
-              <i></i><i></i><i></i>
-            </div>
-            <h3>Sit amet, consectetur.</h3>
-            <p>
-              A little making, a little breaking. That’s where the fun begins.
+            <p class="map-caption">
+              The map is limited to Columbia University's Morningside campus.
             </p>
-            <span class="card-link">Try something new ↗</span>
-          </button>
-          <button
-            class="card card-peach"
-            type="button"
-            data-message="You found your people: curious minds, colorful ideas, and room to be yourself."
+          </div>
+          <aside
+            class="event-form-panel"
+            id="event-form-panel"
+            aria-hidden="true"
           >
-            <div class="card-top">
-              <span>03 / THE GOOD COMPANY</span
-              ><span class="round-arrow">↗</span>
+            <div class="form-heading">
+              <div>
+                <p class="eyebrow">NEW CAMPUS EVENT</p>
+                <h2>Tell people what's happening.</h2>
+              </div>
+              <button
+                class="icon-button"
+                id="cancel-event"
+                type="button"
+                aria-label="Close event form"
+              >
+                ×
+              </button>
             </div>
-            <div class="card-art face" aria-hidden="true">
-              <span>• •</span><i></i>
-            </div>
-            <h3>Adipiscing elit, hello.</h3>
-            <p>Different perspectives. Shared curiosity. Better together.</p>
-            <span class="card-link">Meet your kind of weird ↗</span>
-          </button>
+            <p class="selected-location" id="selected-location">
+              Choose a point on the map.
+            </p>
+            <form id="event-form">
+              <label
+                >Event name<input
+                  id="event-title"
+                  name="title"
+                  type="text"
+                  placeholder="e.g. Sunset soccer"
+                  required
+                  maxlength="60"
+              /></label>
+              <label
+                >Category
+                <select id="event-category" name="category" required>
+                  <option value="" selected disabled>Choose a category</option>
+                  <option value="Festivities">Festivities</option>
+                  <option value="Info session">Info session</option>
+                  <option value="Social meetup">Social meetup</option>
+                  <option value="Sports">Sports</option>
+                  <option value="Student fair">Student fair</option>
+                  <option value="Social wellness">Social wellness</option>
+                  <option value="Barbecue">Barbecue</option>
+                  <option value="Other">Other</option>
+                </select>
+              </label>
+              <label class="conditional-field" id="other-category-field" hidden
+                >Your category<input
+                  id="other-category"
+                  name="otherCategory"
+                  type="text"
+                  placeholder="Describe the event type"
+                  maxlength="40"
+              /></label>
+              <label class="conditional-field" id="players-field" hidden
+                >Other players needed<input
+                  id="players-needed"
+                  name="playersNeeded"
+                  type="number"
+                  min="1"
+                  max="99"
+                  placeholder="e.g. 4"
+              /></label>
+              <label
+                >Listing closes<input
+                  id="event-closes-at"
+                  name="closesAt"
+                  type="datetime-local"
+                  required
+              /></label>
+              <button class="primary-button" type="submit">
+                Publish event
+              </button>
+            </form>
+            <p class="form-note">
+              This first version saves events only in this browser. Shared
+              joining comes with the Node server.
+            </p>
+          </aside>
         </div>
       </section>
-
-      <section class="about section-wrap" id="about">
-        <span class="about-spark" aria-hidden="true">✳</span>
-        <p>end of content page</p>
-        <span>a community website<br />know whats happening near you</span>
+      <section class="events section-wrap" aria-labelledby="events-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">ON CAMPUS NOW</p>
+            <h2 id="events-heading">Events to join</h2>
+          </div>
+          <span class="section-index" id="event-count">0 events</span>
+        </div>
+        <div class="event-list" id="event-list"></div>
       </section>
     </main>
     <footer>
-      <a class="logo" href="#">Name goes here!<span>✳</span></a
-      ><span>replace with something</span
+      <a class="logo" href="#">Campus Connect<span>✳</span></a
+      ><span>Meet, make plans, and show up.</span>
     </footer>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
   </body>

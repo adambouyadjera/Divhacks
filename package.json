@@ -4,7 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "mobile:sync": "npx cap sync",
+    "dev": "node server.js",
+    "start": "node server.js",
+    "mobile:prepare": "node scripts/prepare-mobile-assets.mjs",
+    "mobile:sync": "npm run mobile:prepare && npx cap sync",
     "android": "npm run mobile:sync && npx cap open android",
     "ios": "npm run mobile:sync && npx cap open ios"
   },
@@ -12,7 +15,10 @@
     "@capacitor/android": "^8.5.2",
     "@capacitor/cli": "^8.5.2",
     "@capacitor/core": "^8.5.2",
-    "@capacitor/ios": "^8.5.2"
+    "@capacitor/ios": "^8.5.2",
+    "better-sqlite3": "^13.0.3",
+    "express": "^5.2.1",
+    "maplibre-gl": "^6.11.1"
   },
   "devDependencies": {
     "typescript": "^7.0.2"
