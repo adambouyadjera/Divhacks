@@ -4,8 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "mobile:copy": "mkdir -p www && cp -R index.html style.css script.js images www/",
-    "mobile:sync": "npm run mobile:copy && npx cap sync",
+    "mobile:sync": "npx cap sync",
     "android": "npm run mobile:sync && npx cap open android",
     "ios": "npm run mobile:sync && npx cap open ios"
   },

@@ -11,5 +11,3 @@ function showMessage(message) {
 document.querySelectorAll('[data-message]').forEach(card => {
   card.addEventListener('click', () => showMessage(card.dataset.message));
 });
-
-document.getElementById('year').textContent = new Date().getFullYear();
