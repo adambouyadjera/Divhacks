@@ -18,11 +18,8 @@ const eventList = document.getElementById('event-list');
 const eventCount = document.getElementById('event-count');
 
 const campusBoundary = { south: 40.8036, west: -73.9669, north: 40.8168, east: -73.9505 };
-const events = [
-  { title: 'Pickup basketball', category: 'Sports', playersNeeded: 2, lat: 40.8101, lng: -73.9635 },
-  { title: 'Student org mixer', category: 'Social meetup', lat: 40.8078, lng: -73.9631 },
-  { title: 'Club fair', category: 'Student fair', lat: 40.8072, lng: -73.9625 },
-];
+let events = [];
+let eventMarkers = [];
 
 function showMessage(message) {
   clearTimeout(toastTimeout); toast.textContent = message; toast.classList.add('visible');
@@ -49,12 +46,26 @@ function addEventMarker(event) {
   return new maplibregl.Marker({ element, anchor: 'bottom' }).setLngLat([event.lng, event.lat])
     .setPopup(new maplibregl.Popup({ offset: 20 }).setHTML(eventPopup(event))).addTo(map);
 }
+async function loadEvents() {
+  const response = await fetch('/api/events');
+  if (!response.ok) throw new Error('Could not load events.');
+  events = await response.json();
+  eventMarkers.forEach(marker => marker.remove());
+  eventMarkers = events.map(event => addEventMarker({ ...event, lat: event.latitude, lng: event.longitude, playersNeeded: event.players_needed }));
+  renderEvents();
+}
 function renderEvents() {
   eventList.innerHTML = ''; eventCount.textContent = `${events.length} event${events.length === 1 ? '' : 's'}`;
   events.forEach(event => {
     const card = document.createElement('article'); card.className = 'event-card';
-    card.innerHTML = `<p class="event-category">${event.category}</p><h3>${event.title}</h3><p>${event.playersNeeded ? `${event.playersNeeded} more player${event.playersNeeded === 1 ? '' : 's'} needed` : 'Open to the Columbia community'}</p><button type="button">Join event</button>`;
-    card.querySelector('button').addEventListener('click', () => showMessage(`You joined ${event.title}. Shared joining will be connected to the Node server next.`));
+    const needed = event.players_needed ?? event.playersNeeded;
+    card.innerHTML = `<p class="event-category">${event.category}</p><h3>${event.title}</h3><p>${needed ? `${Math.max(needed - (event.joined_count ?? 0), 0)} more player${needed === 1 ? '' : 's'} needed` : 'Open to the Columbia community'}</p><button type="button">Join event</button>`;
+    card.querySelector('button').addEventListener('click', async () => {
+      const response = await fetch(`/api/events/${event.id}/join`, { method: 'POST' });
+      const result = await response.json();
+      if (!response.ok) return showMessage(result.error);
+      showMessage(`You joined ${event.title}.`); loadEvents();
+    });
     eventList.append(card);
   });
 }
@@ -63,7 +74,7 @@ function resetDraft() {
   otherCategoryInput.required = false; playersInput.required = false; mapExperience.classList.remove('is-drafting'); formPanel.setAttribute('aria-hidden', 'true');
   if (draftMarker) { draftMarker.remove(); draftMarker = undefined; }
 }
-map.on('load', () => { events.forEach(addEventMarker); renderEvents(); });
+map.on('load', () => loadEvents().catch(error => showMessage(error.message)));
 map.on('click', event => {
   if (!isOnCampus(event.lngLat)) { showMessage('Choose a point inside the Columbia campus boundary.'); return; }
   selectedLngLat = event.lngLat; if (draftMarker) draftMarker.remove();
@@ -77,9 +88,12 @@ categorySelect.addEventListener('change', () => {
   otherCategoryField.hidden = !isOther; playersField.hidden = !isSports; otherCategoryInput.required = isOther; playersInput.required = isSports;
 });
 document.getElementById('cancel-event').addEventListener('click', resetDraft);
-eventForm.addEventListener('submit', event => {
+eventForm.addEventListener('submit', async event => {
   event.preventDefault(); if (!selectedLngLat) return;
   const category = categorySelect.value === 'Other' ? otherCategoryInput.value.trim() : categorySelect.value;
-  const newEvent = { title: document.getElementById('event-title').value.trim(), category, playersNeeded: categorySelect.value === 'Sports' ? Number(playersInput.value) : undefined, lat: selectedLngLat.lat, lng: selectedLngLat.lng };
-  events.unshift(newEvent); addEventMarker(newEvent).togglePopup(); renderEvents(); showMessage(`${newEvent.title} is now visible on your map.`); resetDraft();
+  const payload = { title: document.getElementById('event-title').value.trim(), category, playersNeeded: categorySelect.value === 'Sports' ? Number(playersInput.value) : undefined, latitude: selectedLngLat.lat, longitude: selectedLngLat.lng, closesAt: document.getElementById('event-closes-at').value };
+  const response = await fetch('/api/events', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+  const result = await response.json();
+  if (!response.ok) return showMessage(result.error);
+  showMessage(`${result.title} was saved.`); resetDraft(); loadEvents();
 });
