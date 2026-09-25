@@ -33,7 +33,7 @@ function isOnCampus(latitude, longitude) {
 }
 
 app.use(express.json());
-app.use(express.static(join(root, 'www')));
+app.use(express.static(join(root, 'dist')));
 
 app.get('/api/events', (_request, response) => {
   response.json(db.prepare('SELECT * FROM events WHERE closes_at > ? ORDER BY created_at DESC').all(new Date().toISOString()));
